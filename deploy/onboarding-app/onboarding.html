@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing de Novo Cliente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12141C;
+    --paper:#F6F4EF;
+    --paper-2:#EFEBE2;
+    --line:#DCD6C8;
+    --muted:#7A7568;
+    --accent:#FF4405;
+    --accent-ink:#FFF3EE;
+    --growth:#00A878;
+    --growth-ink:#E6F7F1;
+    --radius:14px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-body:'Inter',sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 120px;}
+
+  /* HEADER */
+  header{
+    padding:48px 0 32px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:36px;
+  }
+  .brand{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--ink);
+    font-weight:600;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand::before{
+    content:"";
+    width:8px;height:8px;
+    background:var(--accent);
+    display:inline-block;
+    border-radius:1px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:clamp(28px,5vw,40px);
+    line-height:1.08;
+    margin:0 0 12px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  header p{
+    color:var(--muted);
+    font-size:15.5px;
+    line-height:1.6;
+    max-width:52ch;
+    margin:0;
+  }
+
+  /* FUNNEL TRACKER — signature element: campaign-funnel shaped step nav */
+  .funnel{
+    display:flex;
+    align-items:stretch;
+    gap:3px;
+    margin:32px 0 8px;
+  }
+  .funnel-step{
+    flex:1;
+    height:34px;
+    background:var(--paper-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    color:var(--muted);
+    letter-spacing:.04em;
+    transition:background .25s ease, color .25s ease;
+  }
+  .funnel-step:nth-child(1){clip-path:polygon(0 0,100% 0,100% 100%,0 100%);}
+  .funnel-step:nth-child(2){clip-path:polygon(6% 0,100% 0,94% 100%,0% 100%);}
+  .funnel-step:nth-child(3){clip-path:polygon(6% 0,100% 0,94% 100%,0% 100%);}
+  .funnel-step:nth-child(4){clip-path:polygon(6% 0,100% 0,94% 100%,0% 100%);}
+  .funnel-step:nth-child(5){clip-path:polygon(10% 0,100% 0,100% 100%,0% 100%);margin-left:-2px;}
+  .funnel-step.done{background:var(--growth);color:var(--growth-ink);}
+  .funnel-step.active{background:var(--ink);color:var(--paper);}
+  .funnel-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:11.5px;
+    color:var(--muted);
+    margin-bottom:44px;
+    padding:0 2px;
+  }
+
+  /* STEPS */
+  .step{display:none;animation:fade .35s ease;}
+  .step.visible{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .step-title{
+    font-family:var(--font-display);
+    font-size:21px;
+    font-weight:700;
+    margin:0 0 6px;
+  }
+  .step-sub{color:var(--muted);font-size:14px;margin:0 0 28px;}
+
+  .field{margin-bottom:22px;}
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:8px;
+    color:var(--ink);
+  }
+  .hint{font-weight:400;color:var(--muted);font-size:12.5px;}
+  input[type=text],input[type=email],input[type=tel],input[type=url],textarea{
+    width:100%;
+    padding:13px 14px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    font-family:var(--font-body);
+    font-size:14.5px;
+    color:var(--ink);
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  textarea{resize:vertical;min-height:88px;}
+  input:focus,textarea:focus{
+    outline:none;
+    border-color:var(--ink);
+    box-shadow:0 0 0 3px rgba(18,20,28,0.08);
+  }
+  input:focus-visible,textarea:focus-visible,.chip input:focus-visible + span{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{position:relative;}
+  .chip input{position:absolute;opacity:0;inset:0;cursor:pointer;}
+  .chip span{
+    display:block;
+    padding:10px 16px;
+    border:1px solid var(--line);
+    border-radius:100px;
+    font-size:13.5px;
+    font-weight:500;
+    background:#fff;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .chip input:checked + span{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper);
+  }
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:560px){.row2{grid-template-columns:1fr;}}
+
+  /* NAV */
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;}
+  button{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:14px;
+    border-radius:10px;
+    cursor:pointer;
+    border:none;
+    padding:13px 24px;
+    transition:transform .12s ease, opacity .12s ease;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{opacity:.92;}
+  .btn-ghost{background:transparent;color:var(--muted);padding:13px 8px;}
+  .btn-ghost:hover{color:var(--ink);}
+  .btn-primary:disabled{opacity:.4;cursor:not-allowed;}
+
+  /* REVIEW */
+  .review-box{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    line-height:1.75;
+    white-space:pre-wrap;
+    color:var(--ink);
+    max-height:340px;
+    overflow-y:auto;
+  }
+  .review-box b{color:var(--accent);}
+  .send-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .btn-wa{background:var(--growth);color:#fff;flex:1;text-align:center;}
+  .btn-copy{background:var(--paper-2);color:var(--ink);}
+  .copied-msg{font-size:12.5px;color:var(--growth);margin-top:10px;display:none;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">NOBREGA ADS</div>
+    <h1>Vamos conhecer seu negócio.</h1>
+    <p>Esse briefing leva uns 4 minutos e é a base pra montarmos sua estratégia de tráfego. Quanto mais detalhe, mais rápido a gente sai do zero pra campanha rodando.</p>
+  </header>
+
+  <div class="funnel" id="funnel">
+    <div class="funnel-step active" data-s="1">NEGÓCIO</div>
+    <div class="funnel-step" data-s="2">ESTRATÉGIA</div>
+    <div class="funnel-step" data-s="3">PÚBLICO</div>
+    <div class="funnel-step" data-s="4">MATERIAL</div>
+    <div class="funnel-step" data-s="5">ENVIO</div>
+  </div>
+  <div class="funnel-labels"><span>Etapa <span id="stepNow">1</span> de 5</span><span id="stepPct">20%</span></div>
+
+  <form id="form">
+
+    <!-- STEP 1 -->
+    <section class="step visible" data-step="1">
+      <p class="step-title">Sobre o negócio</p>
+      <p class="step-sub">O básico pra gente te identificar e falar a sua língua.</p>
+
+      <div class="row2">
+        <div class="field">
+          <label>Nome da empresa/marca</label>
+          <input type="text" id="empresa" placeholder="Ex: Doce Encanto Confeitaria">
+        </div>
+        <div class="field">
+          <label>Nome do responsável</label>
+          <input type="text" id="responsavel" placeholder="Seu nome">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>WhatsApp</label>
+          <input type="tel" id="whatsapp" placeholder="(79) 9 9999-9999">
+        </div>
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="email" placeholder="voce@empresa.com">
+        </div>
+      </div>
+      <div class="field">
+        <label>Instagram / rede principal</label>
+        <input type="text" id="instagram" placeholder="@seuperfil">
+      </div>
+      <div class="field">
+        <label>Em poucas linhas, o que sua empresa vende?</label>
+        <textarea id="descricao" placeholder="Ex: vendemos bolos e doces personalizados para festas..."></textarea>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step" data-step="2">
+      <p class="step-title">Estratégia &amp; investimento</p>
+      <p class="step-sub">Isso define o formato de campanha e a meta que vamos perseguir.</p>
+
+      <div class="field">
+        <label>Qual o principal objetivo com os anúncios?</label>
+        <div class="chips" data-group="objetivo">
+          <label class="chip"><input type="radio" name="objetivo" value="Vendas diretas"><span>Vendas diretas</span></label>
+          <label class="chip"><input type="radio" name="objetivo" value="Geração de leads"><span>Geração de leads</span></label>
+          <label class="chip"><input type="radio" name="objetivo" value="Reconhecimento de marca"><span>Reconhecimento de marca</span></label>
+          <label class="chip"><input type="radio" name="objetivo" value="Tráfego para loja física"><span>Tráfego pra loja física</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Já rodou anúncios pagos antes?</label>
+        <div class="chips" data-group="ja_rodou">
+          <label class="chip"><input type="radio" name="ja_rodou" value="Sim"><span>Sim</span></label>
+          <label class="chip"><input type="radio" name="ja_rodou" value="Não"><span>Não</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Quantos aparelhos são vendidos em média hoje?</label>
+        <input type="text" id="resultado_anterior" placeholder="Ex: 30 aparelhos por mês">
+      </div>
+
+      <div class="field">
+        <label>Investimento mensal disponível para anúncios</label>
+        <div class="chips" data-group="investimento">
+          <label class="chip"><input type="radio" name="investimento" value="Até R$1.000"><span>Até R$1.000</span></label>
+          <label class="chip"><input type="radio" name="investimento" value="R$1.000 – R$3.000"><span>R$1.000 – R$3.000</span></label>
+          <label class="chip"><input type="radio" name="investimento" value="R$3.000 – R$10.000"><span>R$3.000 – R$10.000</span></label>
+          <label class="chip"><input type="radio" name="investimento" value="Acima de R$10.000"><span>Acima de R$10.000</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step" data-step="3">
+      <p class="step-title">Público &amp; concorrência</p>
+      <p class="step-sub">Pra quem vamos falar, e o que te diferencia de quem já fala com eles.</p>
+
+      <div class="field">
+        <label>Quem é o cliente ideal? <span class="hint">idade, gênero, localização, interesses</span></label>
+        <textarea id="publico" placeholder="Ex: mulheres de 25 a 45 anos, região de Aracaju, que gostam de festas personalizadas..."></textarea>
+      </div>
+      <div class="field">
+        <label>3 concorrentes diretos</label>
+        <div class="row2">
+          <input type="text" id="concorrente1" placeholder="Concorrente 1">
+          <input type="text" id="concorrente2" placeholder="Concorrente 2">
+        </div>
+        <input type="text" id="concorrente3" placeholder="Concorrente 3" style="margin-top:12px;">
+      </div>
+      <div class="field">
+        <label>O que te diferencia deles?</label>
+        <textarea id="diferencial" placeholder="Ex: entrego em 24h, uso ingredientes sem glúten..."></textarea>
+      </div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="step" data-step="4">
+      <p class="step-title">Material &amp; acessos</p>
+      <p class="step-sub">O que já existe pronto, pra gente saber por onde começar.</p>
+
+      <div class="field">
+        <label>Já tem Gerenciador de Negócios (Business Manager) no Meta?</label>
+        <div class="chips" data-group="bm">
+          <label class="chip"><input type="radio" name="bm" value="Sim"><span>Sim</span></label>
+          <label class="chip"><input type="radio" name="bm" value="Não"><span>Não</span></label>
+          <label class="chip"><input type="radio" name="bm" value="Não sei o que é isso"><span>Não sei o que é isso</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Fotos e vídeos do produto/serviço disponíveis?</label>
+        <div class="chips" data-group="material">
+          <label class="chip"><input type="radio" name="material" value="Sim, tenho bastante"><span>Sim, tenho bastante</span></label>
+          <label class="chip"><input type="radio" name="material" value="Tenho pouco"><span>Tenho pouco</span></label>
+          <label class="chip"><input type="radio" name="material" value="Preciso de ajuda pra produzir"><span>Preciso de ajuda pra produzir</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Tem logo em alta resolução?</label>
+        <div class="chips" data-group="logo">
+          <label class="chip"><input type="radio" name="logo" value="Sim"><span>Sim</span></label>
+          <label class="chip"><input type="radio" name="logo" value="Não"><span>Não</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section class="step" data-step="5">
+      <p class="step-title">Últimos detalhes</p>
+      <p class="step-sub">Confira o resumo e envie direto pra gente.</p>
+
+      <div class="field">
+        <label>Alguma observação extra? <span class="hint">(opcional)</span></label>
+        <textarea id="obs" placeholder="Qualquer coisa que ache importante a gente saber..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Resumo do briefing</label>
+        <div class="review-box" id="reviewBox">Preencha as etapas anteriores pra ver o resumo aqui.</div>
+      </div>
+
+      <div class="send-row">
+        <button type="button" class="btn-wa" id="btnTrello" style="flex:1;">Enviar →</button>
+      </div>
+      <div class="copied-msg" id="trelloMsg" style="color:var(--accent);"></div>
+    </section>
+
+    <div class="nav">
+      <button type="button" class="btn-ghost" id="btnBack">← Voltar</button>
+      <button type="button" class="btn-primary" id="btnNext">Continuar →</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  // ⚠️ troque pelo número da agência (código do país + DDD + número, só dígitos)
+  const AGENCY_WHATSAPP = "5579999999999";
+
+  // ⚠️ cole aqui a URL do webhook (Zapier "Catch Hook" ou Make "Webhooks")
+  // que está configurado para criar um card no seu quadro do Trello.
+  // Sem isso preenchido, o botão "Criar card no Trello" não tem pra onde enviar.
+  const TRELLO_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/28510403/460h1bm/";
+
+  // Endpoint no próprio servidor (mesmo domínio, onboarding.nobregaads.com)
+  // que envia uma cópia do briefing por e-mail via SMTP da Hostinger para
+  // contato@nobregaads.com. Implementado no backend, não aqui no front-end.
+  const EMAIL_COPY_ENDPOINT = "/api/enviar-copia";
+
+  let current = 1;
+  const total = 5;
+  const form = document.getElementById('form');
+  const steps = document.querySelectorAll('.step');
+  const funnelSteps = document.querySelectorAll('.funnel-step');
+  const btnNext = document.getElementById('btnNext');
+  const btnBack = document.getElementById('btnBack');
+  const stepNow = document.getElementById('stepNow');
+  const stepPct = document.getElementById('stepPct');
+
+  function render(){
+    steps.forEach(s => s.classList.toggle('visible', Number(s.dataset.step) === current));
+    funnelSteps.forEach(f => {
+      const n = Number(f.dataset.s);
+      f.classList.toggle('done', n < current);
+      f.classList.toggle('active', n === current);
+    });
+    stepNow.textContent = current;
+    stepPct.textContent = Math.round((current/total)*100) + '%';
+    btnBack.style.visibility = current === 1 ? 'hidden' : 'visible';
+    btnNext.textContent = current === total ? 'Concluído ✓' : 'Continuar →';
+    btnNext.style.display = current === total ? 'none' : 'block';
+    if(current === total) buildReview();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  btnNext.addEventListener('click', () => { if(current < total){ current++; render(); }});
+  btnBack.addEventListener('click', () => { if(current > 1){ current--; render(); }});
+
+  function val(id){ const el = document.getElementById(id); return el && el.value.trim() ? el.value.trim() : '—'; }
+  function radio(name){ const el = form.querySelector(`input[name="${name}"]:checked`); return el ? el.value : '—'; }
+
+  function buildReview(){
+    const lines = [
+`BRIEFING NOVO CLIENTE — NOBREGA ADS`,
+``,
+`— NEGÓCIO —`,
+`Empresa: ${val('empresa')}`,
+`Responsável: ${val('responsavel')}`,
+`WhatsApp: ${val('whatsapp')}`,
+`E-mail: ${val('email')}`,
+`Instagram: ${val('instagram')}`,
+`O que vende: ${val('descricao')}`,
+``,
+`— ESTRATÉGIA —`,
+`Objetivo: ${radio('objetivo')}`,
+`Já rodou anúncios: ${radio('ja_rodou')}`,
+`Aparelhos vendidos/mês: ${val('resultado_anterior')}`,
+`Investimento mensal: ${radio('investimento')}`,
+``,
+`— PÚBLICO —`,
+`Cliente ideal: ${val('publico')}`,
+`Concorrentes: ${val('concorrente1')}, ${val('concorrente2')}, ${val('concorrente3')}`,
+`Diferencial: ${val('diferencial')}`,
+``,
+`— MATERIAL —`,
+`Business Manager: ${radio('bm')}`,
+`Fotos/vídeos: ${radio('material')}`,
+`Logo em alta: ${radio('logo')}`,
+``,
+`— OBSERVAÇÕES —`,
+`${val('obs')}`
+    ];
+    document.getElementById('reviewBox').textContent = lines.join('\n');
+  }
+
+  document.getElementById('btnTrello').addEventListener('click', async () => {
+    const msg = document.getElementById('trelloMsg');
+    const payload = {
+      cardTitle: `${val('empresa')} — novo cliente`,
+      cardDescription: document.getElementById('reviewBox').textContent
+    };
+    msg.style.color = 'var(--muted)';
+    msg.textContent = 'Enviando...';
+    msg.style.display = 'block';
+
+    // Trello é opcional (best-effort) — se o Zap não estiver ativo, não trava
+    // o envio. O que decide sucesso/erro pro cliente é o e-mail chegar.
+    if (TRELLO_WEBHOOK_URL) {
+      fetch(TRELLO_WEBHOOK_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(() => {});
+    }
+
+    try{
+      const resp = await fetch(EMAIL_COPY_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!resp.ok) throw new Error('email endpoint respondeu ' + resp.status);
+      msg.style.color = 'var(--growth)';
+      msg.textContent = 'Recebemos seu briefing! Em breve entramos em contato ✓';
+    }catch(err){
+      msg.style.color = 'var(--accent)';
+      msg.textContent = 'Não conseguimos enviar. Tenta de novo em alguns instantes.';
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><!--__TITLE__--></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F4EF;
+    --panel: #FFFFFF;
+    --panel-2: #EFEBE2;
+    --border: #DCD6C8;
+    --text: #12141C;
+    --muted: #7A7568;
+    --accent: #FF4405;
+    --accent-ink: #FFF3EE;
+    --green: #00A878;
+    --yellow: #B8860B;
+    --red: #FF4405;
+    --gray: #7A7568;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px; line-height: 1.5;
+  }
+  h1, h2, h3, .kpi-card .value, .stat .value { font-family: var(--font-display); }
+  .badge, .chip, th, .metrics-line, .bar-row .val, .acc-meta, header .meta, .brand { font-family: var(--font-mono); }
+
+  .brand {
+    display: flex; align-items: center; margin-bottom: 10px;
+  }
+  .brand-logo { height: 64px; width: auto; display: block; }
+
+  header {
+    padding: 32px 40px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  header h1 { margin: 0; font-size: 24px; color: var(--text); font-weight: 700; letter-spacing: -0.01em; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .tabs { display: flex; align-items: stretch; gap: 3px; padding: 20px 40px 0; flex-wrap: wrap; }
+  .tab {
+    padding: 0 18px; height: 34px; border: none; display: flex; align-items: center; justify-content: center;
+    background: var(--panel-2); color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600;
+    letter-spacing: .04em; transition: background .2s ease, color .2s ease;
+  }
+  .tab:first-child { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  .tab:last-child { clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%); margin-left: -2px; }
+  .tab:not(:first-child):not(:last-child) { clip-path: polygon(6% 0, 100% 0, 94% 100%, 0% 100%); margin-left: -2px; }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: var(--text); color: var(--bg); }
+  main { padding: 28px 40px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .kpi-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px;
+  }
+  .kpi-card .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-mono); }
+  .kpi-card .value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+  .kpi-card .meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi-card.green .value, .delta.green { color: var(--green); }
+  .kpi-card.yellow .value, .delta.yellow { color: var(--yellow); }
+  .kpi-card.red .value, .delta.red { color: var(--red); }
+  .kpi-card.gray .value, .delta.gray { color: var(--gray); }
+  .delta { font-weight: 600; font-size: 12px; }
+
+  .summary-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border); font-size: 12.5px; color: var(--text);
+    font-weight: 500;
+  }
+  .chip b { font-size: 13px; }
+  .chip.SCALE { border-color: var(--green); color: var(--green); }
+  .chip.KILL  { border-color: var(--red); color: var(--red); }
+  .chip.KEEP  { border-color: var(--yellow); color: var(--yellow); }
+  .chip.alert-chip { border-color: var(--accent); color: var(--accent); background: var(--accent-ink); }
+  button.chip { cursor: pointer; transition: all .15s ease; }
+  button.chip:active { transform: scale(0.97); }
+  button.chip.active.SCALE { background: var(--green); border-color: var(--green); color: #fff; }
+  button.chip.active.KILL  { background: var(--red); border-color: var(--red); color: #fff; }
+  button.chip.active.KEEP  { background: var(--yellow); border-color: var(--yellow); color: #fff; }
+
+  .overview {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; margin-bottom: 26px;
+  }
+  .overview h2 { margin: 0 0 4px; font-size: 16px; color: var(--text); font-weight: 700; }
+  .overview .sub { color: var(--muted); font-size: 12px; margin-bottom: 16px; font-family: var(--font-body); }
+  .total-invest { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 18px; }
+  .total-invest .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-mono); }
+  .total-invest .value { font-size: 38px; font-weight: 700; margin-top: 6px; }
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .stat { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .stat .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-mono); }
+  .stat .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+  .bars { display: flex; align-items: flex-end; gap: 10px; height: 240px; overflow-x: auto; padding: 4px 4px 0; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex: 1 0 60px; min-width: 60px; }
+  .bar-col .val { font-size: 11px; color: var(--text); font-variant-numeric: tabular-nums; margin-bottom: 6px; white-space: nowrap; font-family: var(--font-mono); }
+  .bar-col-track { width: 32px; flex: 1; background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px 6px 0 0; display: flex; align-items: flex-end; overflow: hidden; }
+  .bar-col-fill { width: 100%; background: var(--accent); border-radius: 6px 6px 0 0; }
+  .bar-col .name { margin-top: 8px; font-size: 10px; color: var(--muted); text-transform: uppercase; text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-body); }
+
+  .toolbar {
+    display: flex; gap: 10px; align-items: center; margin-bottom: 14px;
+    flex-wrap: wrap; justify-content: space-between;
+  }
+  .toolbar-left { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    background: var(--panel); color: var(--text); border: 1px solid var(--border);
+    padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600;
+    font-family: var(--font-body);
+  }
+  .btn:hover { border-color: var(--text); }
+  select.btn { -webkit-appearance: none; appearance: none; }
+  label.check {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 500;
+    background: var(--panel); border: 1px solid var(--border); padding: 10px 16px; border-radius: 10px; cursor: pointer;
+    font-family: var(--font-body);
+  }
+  label.check input { accent-color: var(--accent); }
+
+  .account-group { margin: 10px 0; }
+  .account-group > summary {
+    cursor: pointer; padding: 14px 18px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; user-select: none; font-size: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .account-group > summary:hover { border-color: var(--text); }
+  .account-group[open] > summary { border-radius: 12px 12px 0 0; border-bottom: none; }
+  .account-group .acc-name { font-weight: 700; font-family: var(--font-display); text-transform: uppercase; }
+  .account-group .acc-meta { color: var(--muted); font-size: 11px; margin-left: auto; text-align: right; }
+  .account-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; padding: 10px 14px 14px; background: var(--panel); }
+
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+  table { width: 100%; min-width: 720px; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+  th { background: var(--panel-2); color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+  details { margin: 6px 0; }
+  details summary { cursor: pointer; padding: 10px 12px; background: var(--panel-2); border-radius: 10px; user-select: none; }
+  details summary:hover { background: var(--border); }
+  details[open] summary { border-bottom: 1px solid var(--border); border-radius: 10px 10px 0 0; }
+  .nested { padding-left: 24px; margin-top: 6px; }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge.SCALE { background: rgba(0,168,120,.1); color: var(--green); border: 1px solid var(--green); }
+  .badge.KILL  { background: rgba(255,68,5,.1);   color: var(--red);   border: 1px solid var(--red);   }
+  .badge.KEEP  { background: rgba(184,134,11,.1); color: var(--yellow);border: 1px solid var(--yellow);}
+  .badge.KEEP-amostra { background: var(--panel-2); color: var(--gray); border: 1px solid var(--border); }
+  .badge.ANALISE { background: var(--panel-2); color: var(--gray); border: 1px solid var(--border); }
+  .badge.quality-ok { background: rgba(0,168,120,.1); color: var(--green); border: 1px solid var(--green); }
+  .badge.quality-alert { background: var(--accent-ink); color: var(--accent); border: 1px solid var(--accent); }
+  .campaign-row.is-alert { outline: 1px solid rgba(255,68,5,.4); border-radius: 10px; }
+  tr.row-alert td { background: var(--accent-ink); }
+
+  .metrics-line { color: var(--muted); font-size: 11.5px; display: flex; gap: 14px; flex-wrap: wrap; margin-top: 2px; }
+  .metrics-line b { color: var(--text); }
+
+  .empty { text-align: center; padding: 60px; color: var(--muted); font-family: var(--font-body); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand"><!-- Opcional: adicione seu logo aqui, ex. <img class="brand-logo" src="seu-logo.svg" alt="Sua marca"> --></div>
+    <h1>DASHBOARD TRÁFEGO PAGO</h1>
+    <div class="meta"><!--__GENERATED_AT__--></div>
+  </div>
+  <div class="meta" id="account"></div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main>
+  <div class="toolbar" style="justify-content:flex-end">
+    <button class="btn" id="btnReload">↻ Recarregar</button>
+  </div>
+  <section class="kpi-row" id="kpiRow"></section>
+  <section class="summary-row" id="summaryRow"></section>
+  <section class="overview" id="overview"></section>
+  <section class="toolbar" id="campaignToolbar"></section>
+  <section id="campaigns"></section>
+</main>
+
+<script>
+/*__JSON_DATA__*/
+
+(function () {
+  const data = window.PAID_TRAFFIC_DATA;
+  if (!data) {
+    document.getElementById('campaigns').innerHTML = '<div class="empty">Sem dados — rode meta-metrics-fetcher.</div>';
+    return;
+  }
+
+  // Nomes de conta como aparecem no Business Manager -> como devem ser exibidos no dash.
+  // Só afeta o texto mostrado; a chave de agrupamento continua sendo o account_name original.
+  // Precisa ficar antes de qualquer render* que a use (renderOverview roda logo abaixo).
+  const ACCOUNT_NAME_OVERRIDES = {
+    'CA - HS Imports': 'HS Imports',
+    'Riachi Iphones': 'Aura',
+    'Tudo para Smartphone': 'Tudo para Iphone',
+  };
+  function displayAccountName(name) {
+    return ACCOUNT_NAME_OVERRIDES[name] || name;
+  }
+
+  // Índice da sequência configurada em ad_account_ids (meta_perfil.json) —
+  // data.accounts já sai do fetch nessa ordem, então só precisamos mapear
+  // account_name -> posição pra reaproveitar no filtro "custom" do dropdown.
+  const accountOrderIndex = {};
+  (data.accounts || []).forEach((a, i) => {
+    accountOrderIndex[a.account_name || a.ad_account_id] = i;
+  });
+
+  const accountCount = (data.accounts || []).length || 1;
+  document.getElementById('account').textContent =
+    `${accountCount} conta${accountCount === 1 ? '' : 's'} · Spend total: R$${(data.spend_total||0).toFixed(2)}`;
+
+  // Tabs (links para os outros windows — também funciona como filtro de período
+  // pro resumo geral, já que cada janela é uma página com seu próprio recorte).
+  const winList = /*__WIN_LIST__*/[4, 7, 14, 30]/*__END_WIN_LIST__*/;
+  const winLabel = (w) => w === 0 ? 'Ontem' : (w === 1 ? 'Hoje' : `${w}d`);
+  const tabs = winList.map(w => {
+    const active = (w === data.window_days) ? 'active' : '';
+    return `<a class="tab ${active}" href="paid-traffic-dashboard-${w}d.html">${winLabel(w)}</a>`;
+  }).join('');
+  document.getElementById('tabs').innerHTML = tabs;
+
+  // KPI cards
+  const kpiHtml = data.perfil_kpis.map(key => {
+    const k = data.kpis_summary[key];
+    if (!k) return '';
+    const status = k.status || 'gray';
+    const valStr = k.value === null ? '—' : formatValue(key, k.value);
+    const tgtStr = formatTarget(key, k.target);
+    const deltaStr = k.delta_pct === null ? '' :
+      `<span class="delta ${status}">${k.delta_pct > 0 ? '+' : ''}${k.delta_pct}%</span> vs meta`;
+    return `<div class="kpi-card ${status}">
+      <div class="label">${labelFor(key)}</div>
+      <div class="value">${valStr}</div>
+      <div class="meta">meta ${tgtStr} · ${deltaStr}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('kpiRow').innerHTML = kpiHtml;
+
+  // Recarregar: busca dado ao vivo de TODAS as janelas (não só a aberta) —
+  // servidor com token do Meta (Mac ou VPS). Se o endpoint não existir, cai
+  // pro reload comum — mesmo HTML funciona nos dois lugares.
+  document.getElementById('btnReload').addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget;
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '⏳ Atualizando tudo… (pode levar alguns minutos)';
+    try {
+      const resp = await fetch('/api/refresh', { cache: 'no-store' });
+      if (resp.ok) { location.reload(); return; }
+    } catch (e) { /* endpoint não existe aqui — cai no reload comum */ }
+    location.reload();
+  });
+
+  const allCampaigns = data.campaigns || [];
+  let decisionFilter = null; // null | 'SCALE' | 'KEEP' | 'KILL'
+
+  const DECISION_LABELS_PT = { SCALE: 'Escalar', KEEP: 'Manter', KILL: 'Pausar' };
+
+  // Nome da campanha/anúncio começa com |DD/MM| (data de subida) — usado pra
+  // saber a idade real, já que campanha nova ainda não gerou resultado
+  // suficiente pra julgar (nem "Ruim", nem nada): fica "Em análise" até
+  // completar 3 dias, independente de gasto ou decide().
+  function campaignStartDate(name) {
+    const m = /^\|(\d{2})\/(\d{2})\|/.exec(name || '');
+    if (!m) return null;
+    const day = parseInt(m[1], 10);
+    const month = parseInt(m[2], 10) - 1;
+    if (day < 1 || day > 31 || month < 0 || month > 11) return null;
+    const ref = new Date(data.generated_at);
+    let candidate = new Date(ref.getFullYear(), month, day);
+    if (candidate > ref) candidate = new Date(ref.getFullYear() - 1, month, day);
+    return candidate;
+  }
+  function campaignAgeDays(c) {
+    const start = campaignStartDate(c.name);
+    if (!start) return null;
+    const ref = new Date(data.generated_at);
+    ref.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    return Math.round((ref - start) / 86400000);
+  }
+  function isCampaignNew(c) {
+    const age = campaignAgeDays(c);
+    return age !== null && age < 3;
+  }
+
+  function decisionKeyOf(c) {
+    if (isCampaignNew(c)) return 'KEEP';
+    const d = (c.decide || '').toUpperCase();
+    // KEEP-amostra (amostra insuficiente) é uma variante de KEEP — só 3
+    // filtros de status existem (Manter/Escalar/Pausar), sem bucket à parte.
+    if (d.includes('AMOSTRA') || d === 'VALIDATION') return 'KEEP';
+    if (d === 'SCALE' || d === 'KEEP' || d === 'KILL') return d;
+    return null;
+  }
+  // Texto visível do badge de decisão, padronizado pros mesmos nomes dos
+  // filtros (Escalar/Manter/Pausar) — antes mostrava o valor cru em inglês
+  // (SCALE/KEEP/KILL/KEEP-amostra) direto na tela.
+  function decisionLabel(decide) {
+    const key = decisionKeyOf({ decide });
+    return key ? DECISION_LABELS_PT[key] : (decide || '—');
+  }
+
+  // Resumo de decisão (Escalar/Manter/Pausar/Amostra) + campanhas fora do padrão.
+  // Cada chip é clicável: filtra a lista de campanhas por essa decisão.
+  renderSummaryChips(allCampaigns);
+
+  // Visão geral: médias entre todas as contas + gráfico de spend por conta.
+  renderOverview(data, allCampaigns);
+
+  if (allCampaigns.length === 0) {
+    document.getElementById('campaignToolbar').innerHTML = '';
+    document.getElementById('campaigns').innerHTML = '<div class="empty">Sem campanhas ativas na janela.</div>';
+    return;
+  }
+
+  // Toolbar de ordenação/filtro da lista de campanhas.
+  document.getElementById('campaignToolbar').innerHTML = `
+    <div class="toolbar-left">
+      <select id="sortSelect" class="btn">
+        <option value="spend">Ordenar por gasto</option>
+        <option value="cost_per_msg">Ordenar por custo por mensagem</option>
+        <option value="alpha">Ordenar por ordem alfabética</option>
+        <option value="custom">Ordenar por contas Nay Rodrigues</option>
+      </select>
+      <label class="check"><input type="checkbox" id="alertOnly"> Só fora do padrão ⚠️</label>
+    </div>
+  `;
+  document.getElementById('sortSelect').addEventListener('change', renderCampaignGroups);
+  document.getElementById('alertOnly').addEventListener('change', renderCampaignGroups);
+
+  renderCampaignGroups();
+
+  function renderSummaryChips(campaigns) {
+    let alertCount = 0;
+    campaigns.forEach(c => {
+      if (classifyQuality(c).cls === 'alert') alertCount++;
+    });
+    const chipBtn = (key, cls) => {
+      const active = decisionFilter === key ? 'active' : '';
+      return `<button type="button" class="chip ${cls} ${active}" data-decide="${key}">`
+        + `${DECISION_LABELS_PT[key]}</button>`;
+    };
+    const chips = [
+      chipBtn('SCALE', 'SCALE'),
+      chipBtn('KEEP', 'KEEP'),
+      chipBtn('KILL', 'KILL'),
+    ];
+    if (alertCount > 0) chips.push(`<span class="chip alert-chip">fora do padrão</span>`);
+    document.getElementById('summaryRow').innerHTML = chips.join('');
+    document.getElementById('summaryRow').querySelectorAll('button.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-decide');
+        decisionFilter = decisionFilter === key ? null : key;
+        renderSummaryChips(campaigns);
+        renderCampaignGroups();
+      });
+    });
+  }
+
+  function renderOverview(data, campaigns) {
+    // Investimento e médias somam TODAS as campanhas que gastaram na janela
+    // (inclusive as já encerradas/arquivadas) — senão o gráfico mostra menos
+    // do que foi de fato investido no período. "Campanhas ativas" continua
+    // sendo só a contagem do que está rodando agora, isso sim é status atual.
+    const activeCampaigns = campaigns.filter(c => (c.effective_status||'').toUpperCase() === 'ACTIVE');
+    const avg = (arr) => arr.length ? arr.reduce((a,b)=>a+b,0) / arr.length : null;
+
+    const ctrs = campaigns.map(ctrOf).filter(v => v !== null);
+    const cpms = campaigns.map(c => c.metrics && c.metrics.cpm).filter(v => v !== null && v !== undefined);
+    const freqs = campaigns.map(c => c.metrics && c.metrics.frequency).filter(v => v !== null && v !== undefined);
+    const msgCosts = campaigns.filter(c => c.decide_metric_key === 'cost_per_msg')
+      .map(c => c.metrics && c.metrics.cost_per_msg).filter(v => v !== null && v !== undefined);
+
+    const statHtml = [
+      { label: 'Contas monitoradas', value: (data.accounts || []).length },
+      { label: 'Campanhas ativas', value: activeCampaigns.length },
+      { label: 'CTR médio', value: avg(ctrs) !== null ? avg(ctrs).toFixed(2) + '%' : '—' },
+      { label: 'CPM médio', value: avg(cpms) !== null ? 'R$' + avg(cpms).toFixed(2) : '—' },
+      { label: 'Frequência média', value: avg(freqs) !== null ? avg(freqs).toFixed(2) : '—' },
+      { label: 'Custo/msg médio', value: avg(msgCosts) !== null ? 'R$' + avg(msgCosts).toFixed(2) : '—' },
+    ].map(s => `<div class="stat"><div class="label">${s.label}</div><div class="value">${s.value}</div></div>`).join('');
+
+    // Gasto por conta (todas) — investimento total da janela, não só o que está ativo hoje.
+    // Ordem alfabética pelo nome exibido (alias), não por gasto.
+    const byAccount = {};
+    campaigns.forEach(c => {
+      const name = c.account_name || c.account_id || 'sem conta';
+      byAccount[name] = (byAccount[name] || 0) + (c.spend || 0);
+    });
+    const rows = Object.entries(byAccount).sort((a, b) =>
+      displayAccountName(a[0]).localeCompare(displayAccountName(b[0]), 'pt-BR'));
+    // Teto fixo (não o maior gasto do momento) — assim o gráfico não fica se
+    // recalibrando toda hora conforme quem está gastando mais; conta que
+    // passar de R$500 só fica com a barra cheia (100%), sem estourar.
+    const BARS_MAX_SPEND = 450;
+    const barsHtml = rows.map(([name, spend]) => `
+      <div class="bar-col">
+        <span class="val">R$${spend.toFixed(2)}</span>
+        <span class="bar-col-track"><span class="bar-col-fill" style="height:${Math.min(spend/BARS_MAX_SPEND*100, 100)}%"></span></span>
+        <span class="name" title="${escapeHtml(displayAccountName(name))}">${escapeHtml(displayAccountName(name))}</span>
+      </div>`).join('');
+
+    const overviewTitle = data.view_label
+      ? `Visão geral — contas de ${escapeHtml(data.view_label)}`
+      : 'Visão geral — todas as contas';
+    document.getElementById('overview').innerHTML = `
+      <h2>${overviewTitle}</h2>
+      <div class="sub">Médias e comparação de gasto nesta janela (${winLabel(data.window_days)}). Troque a aba acima pra ver outro período.</div>
+      <div class="total-invest">
+        <div class="label">Total investido em anúncios</div>
+        <div class="value">R$${(data.spend_total||0).toFixed(2)}</div>
+      </div>
+      <div class="overview-grid">${statHtml}</div>
+      <div class="bars">${barsHtml || '<div class="empty">Sem campanhas com gasto nessa janela.</div>'}</div>
+    `;
+  }
+
+  function ctrOf(c) {
+    const imp = c.raws && c.raws.impressions;
+    const clk = c.raws && c.raws.clicks;
+    if (!imp) return null;
+    return (clk / imp) * 100;
+  }
+
+  // Mesma faixa de classificação usada no relatório de WhatsApp (report_formatter.py):
+  // MENSAGEM avalia por custo/mensagem, ENGAJAMENTO/VISITA/INTERAÇÃO por custo/resultado.
+  function classifyQuality(c) {
+    const result = classifyQualityBase(c);
+    // alert_2d vem do fetch_metrics.py: decide=KILL nos últimos 2 dias
+    // corridos seguidos (não só o período da janela vista) — mais grave que
+    // um "Ruim"/"Sem mensagens" pontual de 1 dia só, substitui o label.
+    if (result.cls === 'alert' && c.alert_2d) {
+      return { label: 'Alerta', cls: 'alert' };
+    }
+    return result;
+  }
+
+  function classifyQualityBase(c) {
+    const key = c.decide_metric_key;
+    const val = c.metrics ? c.metrics[key] : null;
+    if (val === null || val === undefined) {
+      // cost_per_msg/cost_per_result vêm null quando 0 mensagens ou 0
+      // leads/vendas foram registrados até agora — mostra SR direto,
+      // independente do gasto (mesmo R$0,00 no período) e da idade da
+      // campanha (mesmo com menos de 3 dias — zero resultado é a
+      // informação em si, não precisa esperar "amostra suficiente" nem
+      // decide() confirmar KILL). Assim que a campanha marcar 1
+      // mensagem/lead, val deixa de ser null e o status muda sozinho no
+      // próximo fetch.
+      if (key === 'cost_per_msg' || key === 'cost_per_result') {
+        return { label: 'SR', cls: 'alert' };
+      }
+      return { label: null, cls: '' };
+    }
+    // Campanha com menos de 3 dias de vida e JÁ com algum resultado ainda
+    // não gerou amostra suficiente pra julgar como boa ou ruim — "Em
+    // análise" cobre esse caso (ver isCampaignNew/decisionLabel). Só entra
+    // aqui, não no SR acima, senão campanha nova sem 1 mensagem sequer
+    // ficaria sem aviso nenhum até completar 3 dias.
+    if (isCampaignNew(c)) return { label: null, cls: '' };
+    // Gasto perto de R$0 pode gerar cost_per_msg enganoso (ex: 0/1 mensagem =
+    // R$0,00 "Excelente" sem gasto real nenhum) — só se aplica aqui, quando
+    // JÁ existe um valor numérico calculado (não afeta o SR acima).
+    if ((c.spend || 0) < 1) return { label: null, cls: '' };
+    if (key === 'cost_per_msg') {
+      if (val < 3) return { label: 'Excelente', cls: 'ok' };
+      if (val <= 5) return { label: 'Bom', cls: 'ok' };
+      return { label: 'Ruim', cls: 'alert' };
+    }
+    if (key === 'cost_per_result') {
+      if (val < 0.5) return { label: 'Ótimo', cls: 'ok' };
+      return { label: 'Ruim', cls: 'alert' };
+    }
+    return { label: null, cls: '' };
+  }
+
+  function renderCampaignGroups() {
+    const sortKey = document.getElementById('sortSelect').value;
+    const alertOnly = document.getElementById('alertOnly').checked;
+
+    let filtered = allCampaigns.filter(c => {
+      if (decisionFilter && decisionKeyOf(c) !== decisionFilter) return false;
+      if (alertOnly && classifyQuality(c).cls !== 'alert') return false;
+      return true;
+    });
+
+    const sortVal = (c) => {
+      if (sortKey === 'cost_per_msg') {
+        const v = c.metrics && c.metrics.cost_per_msg;
+        return v === null || v === undefined ? -1 : v; // sem dado vai pro fim (asc não faz sentido aqui)
+      }
+      return c.spend || 0;
+    };
+    if (sortKey === 'alpha') {
+      filtered.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR'));
+    } else {
+      filtered.sort((a, b) => sortKey === 'cost_per_msg' ? sortVal(b) - sortVal(a) : (b.spend||0) - (a.spend||0));
+    }
+
+    const groups = {};
+    filtered.forEach(c => {
+      const name = c.account_name || c.account_id || 'Conta sem nome';
+      (groups[name] = groups[name] || []).push(c);
+    });
+    const groupNames = sortKey === 'alpha'
+      ? Object.keys(groups).sort((a, b) => displayAccountName(a).localeCompare(displayAccountName(b), 'pt-BR'))
+      : sortKey === 'custom'
+      ? Object.keys(groups).sort((a, b) => {
+          const idxA = accountOrderIndex[a] ?? Number.MAX_SAFE_INTEGER;
+          const idxB = accountOrderIndex[b] ?? Number.MAX_SAFE_INTEGER;
+          return idxA - idxB;
+        })
+      : Object.keys(groups).sort((a, b) => {
+          const spendA = groups[a].reduce((s,c)=>s+(c.spend||0),0);
+          const spendB = groups[b].reduce((s,c)=>s+(c.spend||0),0);
+          return spendB - spendA;
+        });
+
+    if (groupNames.length === 0) {
+      document.getElementById('campaigns').innerHTML = '<div class="empty">Nenhuma campanha corresponde ao filtro.</div>';
+      return;
+    }
+
+    const html = groupNames.map(name => {
+      const camps = groups[name];
+      const totalSpend = camps.reduce((s,c)=>s+(c.spend||0), 0);
+      const alertN = camps.filter(c => classifyQuality(c).cls === 'alert').length;
+      const alertTag = alertN > 0 ? ` · <span style="color:var(--red)">⚠️ ${alertN} fora do padrão</span>` : '';
+      const cap = (data.budget_caps || {})[camps[0] && camps[0].account_id];
+      const capTag = cap != null ? ` · teto R$${cap.toFixed(2)}/dia` : '';
+      return `<details class="account-group" open>
+        <summary>
+          <span class="acc-name">${escapeHtml(displayAccountName(name))}</span>
+          <span class="acc-meta">${camps.length} campanha${camps.length===1?'':'s'} · R$${totalSpend.toFixed(2)}${capTag}${alertTag}</span>
+        </summary>
+        <div class="account-body">${camps.map(c => renderCampaign(c, data.perfil_kpis)).join('')}</div>
+      </details>`;
+    }).join('');
+    document.getElementById('campaigns').innerHTML = html;
+  }
+
+  function renderCampaign(c, kpis) {
+    const adsetsHtml = (c.adsets||[]).slice().sort((a,b)=>b.spend-a.spend).map(as => renderAdset(as, kpis, c.decide_metric_key)).join('');
+    const ctr = ctrOf(c);
+    const budget = c.daily_budget != null ? `R$${c.daily_budget.toFixed(2)}/dia`
+      : (c.lifetime_budget != null ? `R$${c.lifetime_budget.toFixed(2)} vitalício` : '—');
+    const isNew = isCampaignNew(c);
+    const quality = classifyQuality(c);
+    const qualityBadge = quality.label
+      ? `<span class="badge quality-${quality.cls}"${quality.label === 'SR' ? ' title="Sem Resultado"' : ''}>${quality.cls === 'alert' ? '⚠️ ' : ''}${quality.label}</span>`
+      : '';
+    const decideBadge = isNew
+      ? `<span class="badge ANALISE">Em análise</span>`
+      : `<span class="badge ${c.decide}">${decisionLabel(c.decide)}</span>`;
+    const primaryVal = c.decide_metric_key && c.metrics ? c.metrics[c.decide_metric_key] : null;
+    const primaryLabel = c.decide_metric_key === 'cost_per_result' ? 'Custo/Resultado' : labelFor(c.decide_metric_key || '');
+    return `<details class="campaign-row ${quality.cls === 'alert' ? 'is-alert' : ''}">
+      <summary>
+        ${decideBadge}
+        ${qualityBadge}
+        <b>${escapeHtml(c.name)}</b>
+        <span style="color:var(--muted)">· ${c.objective || ''}</span>
+        <span style="float:right">R$${(c.spend||0).toFixed(2)}</span>
+        <div class="metrics-line">
+          ${c.decide_metric_key ? `<span>${primaryLabel}: <b>${formatValue(c.decide_metric_key, primaryVal)}</b></span>` : ''}
+          <span>CPM: <b>${formatValue('cpm', c.metrics && c.metrics.cpm)}</b></span>
+          <span>CTR: <b>${ctr === null ? '—' : ctr.toFixed(2) + '%'}</b></span>
+          <span>Frequência: <b>${formatValue('frequency', c.metrics && c.metrics.frequency)}</b></span>
+          <span>Orçamento: <b>${budget}</b></span>
+        </div>
+      </summary>
+      <div class="nested">${adsetsHtml}</div>
+    </details>`;
+  }
+
+  function renderAdset(as, kpis, decideMetricKey) {
+    const adsHtml = renderAdsTable(as.ads, kpis, decideMetricKey);
+    return `<details>
+      <summary><b>${escapeHtml(as.name)}</b> <span style="float:right;color:var(--muted)">R$${as.spend.toFixed(2)}</span></summary>
+      <div class="nested">${adsHtml}</div>
+    </details>`;
+  }
+
+  function renderAdsTable(ads, kpis, decideMetricKey) {
+    const sorted = [...ads].sort((a,b)=>b.spend-a.spend);
+    const headers = `<tr><th>Decisão</th><th>Anúncio</th><th class="num">Spend</th>${kpis.map(k=>`<th class="num">${k.toUpperCase()}</th>`).join('')}<th>Razão</th></tr>`;
+    const rows = sorted.map(a => {
+      // Mesma sinalização de "fora do padrão" da campanha, aplicada por
+      // anúncio — antes só o badge de decisão (KILL/KEEP/SCALE) aparecia
+      // aqui, sem o alerta visual quando o anúncio gastou sem gerar
+      // mensagem (cost_per_msg vem null nesse caso).
+      const adCtx = { decide_metric_key: decideMetricKey, metrics: a.metrics, decide: a.decide, spend: a.spend, name: a.ad_name };
+      const isNew = isCampaignNew(adCtx);
+      const quality = classifyQuality(adCtx);
+      const qualityBadge = quality.label
+        ? ` <span class="badge quality-${quality.cls}"${quality.label === 'SR' ? ' title="Sem Resultado"' : ''}>${quality.cls === 'alert' ? '⚠️ ' : ''}${quality.label}</span>`
+        : '';
+      const decideBadge = isNew
+        ? `<span class="badge ANALISE">Em análise</span>`
+        : `<span class="badge ${a.decide}">${decisionLabel(a.decide)}</span>`;
+      return `<tr class="${quality.cls === 'alert' ? 'row-alert' : ''}">
+      <td>${decideBadge}${qualityBadge}</td>
+      <td>${escapeHtml(a.ad_name)}</td>
+      <td class="num">R$${a.spend.toFixed(2)}</td>
+      ${kpis.map(k=>`<td class="num">${formatValue(k, a.metrics[k])}</td>`).join('')}
+      <td style="color:var(--muted);font-size:12px">${escapeHtml(a.decide_reason || '')}</td>
+    </tr>`;
+    }).join('');
+    return `<div class="table-wrap"><table>${headers}${rows}</table></div>`;
+  }
+
+  function formatValue(key, v) {
+    if (v === null || v === undefined) return '—';
+    if (key === 'ctr' || key === 'frequency') return Number(v).toFixed(2) + (key==='ctr'?'%':'');
+    if (key === 'roas') return Number(v).toFixed(2) + 'x';
+    return 'R$' + Number(v).toFixed(2);
+  }
+  function formatTarget(key, t) {
+    if (t === null || t === undefined) return '—';
+    if (key === 'ctr') return Number(t).toFixed(2) + '%';
+    if (key === 'roas') return Number(t).toFixed(2) + 'x';
+    if (key === 'frequency') return Number(t).toFixed(2);
+    return 'R$' + Number(t).toFixed(2);
+  }
+  function labelFor(key) {
+    const m = {cpl:'CPL', cpa:'CPA', roas:'ROAS', cost_per_msg:'Custo/Msg', cost_per_result:'Custo/Resultado', cpm:'CPM', ctr:'CTR', cpc:'CPC', frequency:'Frequência', cost_per_install:'Custo/Install'};
+    return m[key] || (key || '').toUpperCase();
+  }
+  function escapeHtml(s) {
+    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.zxlab.meta-account-alert</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>{PYTHON}</string>
+    <string>{HOME}/.operacao-ia/scripts/meta/check_account_alerts.py</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>900</integer>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stderr.log</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+    <key>PYTHON_BIN</key>
+    <string>{PYTHON}</string>
+  </dict>
+</dict>
+</plist>
