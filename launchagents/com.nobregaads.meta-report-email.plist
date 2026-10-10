@@ -3,20 +3,25 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.zxlab.meta-account-alert</string>
+  <string>com.nobregaads.meta-report-email</string>
   <key>ProgramArguments</key>
   <array>
     <string>{PYTHON}</string>
-    <string>{HOME}/.operacao-ia/scripts/meta/check_account_alerts.py</string>
+    <string>{HOME}/.operacao-ia/scripts/meta/send_email_report.py</string>
   </array>
-  <key>StartInterval</key>
-  <integer>900</integer>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Hour</key><integer>8</integer>
+      <key>Minute</key><integer>20</integer>
+    </dict>
+  </array>
   <key>RunAtLoad</key>
-  <true/>
+  <false/>
   <key>StandardOutPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stdout.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-report-email.stdout.log</string>
   <key>StandardErrorPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stderr.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-report-email.stderr.log</string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>

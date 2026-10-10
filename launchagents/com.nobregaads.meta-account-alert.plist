@@ -3,20 +3,20 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.zxlab.meta-fetch</string>
+  <string>com.nobregaads.meta-account-alert</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/bin/bash</string>
-    <string>{HOME}/.operacao-ia/scripts/meta/run_fetch.sh</string>
+    <string>{PYTHON}</string>
+    <string>{HOME}/.operacao-ia/scripts/meta/check_account_alerts.py</string>
   </array>
   <key>StartInterval</key>
-  <integer>3600</integer>
+  <integer>900</integer>
   <key>RunAtLoad</key>
-  <false/>
+  <true/>
   <key>StandardOutPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-fetch.stdout.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stdout.log</string>
   <key>StandardErrorPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-fetch.stderr.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-account-alert.stderr.log</string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>

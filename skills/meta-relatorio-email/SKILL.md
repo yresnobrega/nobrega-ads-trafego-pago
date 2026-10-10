@@ -84,7 +84,7 @@ Executar o instalador novamente é seguro: ele atualiza os arquivos e recarrega 
 Verificar se o job está carregado:
 
 ```bash
-launchctl list | grep com.zxlab.meta-report-email
+launchctl list | grep com.nobregaads.meta-report-email
 ```
 
 Enviar imediatamente:
@@ -114,8 +114,8 @@ Nunca exibir `SMTP_PASSWORD` durante o diagnóstico.
 ## 6. Desinstalar
 
 ```bash
-launchctl unload ~/Library/LaunchAgents/com.zxlab.meta-report-email.plist
-rm ~/Library/LaunchAgents/com.zxlab.meta-report-email.plist
+launchctl unload ~/Library/LaunchAgents/com.nobregaads.meta-report-email.plist
+rm ~/Library/LaunchAgents/com.nobregaads.meta-report-email.plist
 ```
 
 Isso remove apenas o agendamento. Para remover também os scripts, apagar `send_email_report.py` somente se o relatório por e-mail não for mais usado; manter `report_formatter.py` se o WhatsApp ainda estiver ativo.

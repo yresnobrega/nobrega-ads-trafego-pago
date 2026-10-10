@@ -21,27 +21,27 @@ LAUNCH_DST = Path.home() / "Library" / "LaunchAgents"
 PROGRESS = Path.home() / ".operacao-ia" / "config" / "setup6_progress.json"
 
 PLISTS = [
-    "com.zxlab.meta-fetch.plist",
-    "com.zxlab.meta-dashboard-server.plist",
+    "com.nobregaads.meta-fetch.plist",
+    "com.nobregaads.meta-dashboard-server.plist",
 ]
 
 # Identifica meta-fetch entre os PLISTS (excluído quando há conflito)
-FETCH_PLIST = "com.zxlab.meta-fetch.plist"
+FETCH_PLIST = "com.nobregaads.meta-fetch.plist"
 
 # Whitelist de labels conhecidos como fetchers Meta API. Restritivo —
 # evita falso positivo em labels com substring "meta" (ex: metadata helper).
 CONFLICT_LABELS = {
-    "com.zxlab.creative-roas-dashboard",
-    "com.zxlab.meta-capi-refund",
-    "com.zxlab.meta-ads-fetch",
-    "com.zxlab.fb-ads-fetch",
+    "com.nobregaads.creative-roas-dashboard",
+    "com.nobregaads.meta-capi-refund",
+    "com.nobregaads.meta-ads-fetch",
+    "com.nobregaads.fb-ads-fetch",
 }
 # Padrão extra: labels que claramente são fetchers Meta de outros projetos.
 CONFLICT_PATTERN = re.compile(
     r"\.(meta-ads|fb-ads|facebook-ads|meta-fetch|creative-roas)(\b|[._-])",
     re.IGNORECASE,
 )
-SELF_LABEL_PATTERN = re.compile(r"com\.zxlab\.meta-(fetch|dashboard-server)")
+SELF_LABEL_PATTERN = re.compile(r"com\.nobregaads\.meta-(fetch|dashboard-server)")
 
 
 def detect_conflicts():
@@ -134,7 +134,7 @@ def main():
         for label in conflicts:
             print(f"     - {label}")
         print()
-        print("Instalar `com.zxlab.meta-fetch` vai duplicar chamadas Meta API.")
+        print("Instalar `com.nobregaads.meta-fetch` vai duplicar chamadas Meta API.")
         print()
         print("Opções:")
         print("  [A] Pular fetch (manter apenas dashboard server) — recomendado")
@@ -169,7 +169,7 @@ def main():
 
     print("\n📋 Validando jobs ativos...")
     result = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
-    active = [l for l in result.stdout.splitlines() if "zxlab.meta" in l]
+    active = [l for l in result.stdout.splitlines() if "nobregaads.meta" in l]
     for line in active:
         print(f"   {line}")
 
@@ -177,7 +177,7 @@ def main():
     if len(active) >= expected:
         print(f"\n✅ {len(active)} jobs ativos.")
     else:
-        print(f"\n⚠️  Esperava {expected}, encontrou {len(active)}. Rode `launchctl list | grep zxlab.meta` manualmente.")
+        print(f"\n⚠️  Esperava {expected}, encontrou {len(active)}. Rode `launchctl list | grep nobregaads.meta` manualmente.")
 
     print("\nPronto para a Etapa 10 (auditoria + finalização).")
 

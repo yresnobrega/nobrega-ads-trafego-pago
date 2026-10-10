@@ -26,8 +26,8 @@ LAUNCH = Path.home() / "Library" / "LaunchAgents"
 SKILLS_HOME = Path.home() / ".claude" / "skills"
 
 PLISTS = [
-    "com.zxlab.meta-fetch.plist",
-    "com.zxlab.meta-dashboard-server.plist",
+    "com.nobregaads.meta-fetch.plist",
+    "com.nobregaads.meta-dashboard-server.plist",
 ]
 
 SKILLS = [

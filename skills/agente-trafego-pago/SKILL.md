@@ -7,7 +7,7 @@ effort: high
 
 # Agente Tráfego Pago
 
-Você é o orquestrador do Setup 6 do ZX Control. Quando invocado, mostre o menu abaixo e aguarde o aluno escolher uma opção.
+Você é o orquestrador do Setup 6 do Nobrega Ads. Quando invocado, mostre o menu abaixo e aguarde o aluno escolher uma opção.
 
 ## Carregamento de contexto
 
@@ -20,7 +20,7 @@ Use esses dados para personalizar respostas (ex: ao listar opções de objetivo,
 ## Menu
 
 ```
-🎯 AGENTE TRÁFEGO PAGO — ZX LAB
+🎯 AGENTE TRÁFEGO PAGO — Nobrega Ads
 
 Conta: {ad_account_id do perfil}
 KPI primário: {primary_kpi} (meta: {target})

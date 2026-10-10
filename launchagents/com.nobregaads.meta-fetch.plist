@@ -3,25 +3,20 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.zxlab.meta-report-email</string>
+  <string>com.nobregaads.meta-fetch</string>
   <key>ProgramArguments</key>
   <array>
-    <string>{PYTHON}</string>
-    <string>{HOME}/.operacao-ia/scripts/meta/send_email_report.py</string>
+    <string>/bin/bash</string>
+    <string>{HOME}/.operacao-ia/scripts/meta/run_fetch.sh</string>
   </array>
-  <key>StartCalendarInterval</key>
-  <array>
-    <dict>
-      <key>Hour</key><integer>8</integer>
-      <key>Minute</key><integer>20</integer>
-    </dict>
-  </array>
+  <key>StartInterval</key>
+  <integer>3600</integer>
   <key>RunAtLoad</key>
   <false/>
   <key>StandardOutPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-report-email.stdout.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-fetch.stdout.log</string>
   <key>StandardErrorPath</key>
-  <string>{HOME}/.operacao-ia/logs/meta-report-email.stderr.log</string>
+  <string>{HOME}/.operacao-ia/logs/meta-fetch.stderr.log</string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>

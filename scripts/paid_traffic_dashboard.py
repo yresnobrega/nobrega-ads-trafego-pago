@@ -146,7 +146,7 @@ def build_index_html(default_url):
     return (
         '<!doctype html><html><head><meta charset="utf-8">'
         f'<meta http-equiv="refresh" content="0; url={default_url}">'
-        '<title>ZX Control — Tráfego Pago</title>'
+        '<title>Nobrega Ads — Tráfego Pago</title>'
         '<style>body{background:#F6F4EF;color:#12141C;font-family:Inter,system-ui,sans-serif;'
         'padding:40px;text-align:center}'
         'a{color:#FF4405;font-weight:600}</style></head><body>'

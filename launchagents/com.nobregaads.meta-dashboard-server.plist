@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.zxlab.meta-dashboard-server</string>
+  <string>com.nobregaads.meta-dashboard-server</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>

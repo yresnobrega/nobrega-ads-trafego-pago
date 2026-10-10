@@ -54,7 +54,7 @@ def check_gh():
 def check_config():
     """Produto avulso: nao exige setups anteriores.
 
-    Se o config base nao existir (comprador que nao veio do ZX Control),
+    Se o config base nao existir (comprador que nao veio do Nobrega Ads),
     cria um minimo viavel em vez de bloquear a instalacao.
     """
     if not CONFIG.exists():

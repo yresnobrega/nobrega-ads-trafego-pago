@@ -10,7 +10,7 @@
 > NAO execute nenhum script ainda. Aguarde o aluno digitar **INICIAR SETUP**.
 >
 > **Primeira mensagem (envie exatamente assim):**
-> "Olá! Aqui é o Claude da ZX LAB e vou instalar contigo a sua operação completa de tráfego pago Meta ADS direto no Claude Code.
+> "Olá! Aqui é o Claude da Nobrega Ads e vou instalar contigo a sua operação completa de tráfego pago Meta ADS direto no Claude Code.
 >
 > Ao final desta sessão você terá:
 > - MCP oficial do Meta conectado (criar campanhas, ler insights e ajustar budget direto pelo chat)
@@ -26,7 +26,7 @@
 
 ---
 
-# ZX Control — Semana 6: Tráfego Pago Meta ADS
+# Nobrega Ads — Semana 6: Tráfego Pago Meta ADS
 
 ## REGRAS DE COMPORTAMENTO (leia antes de tudo)
 
@@ -437,8 +437,8 @@ Pronto para a Etapa 9?"
 
 ### O que e
 Instala 2 jobs do macOS (LaunchAgents):
-- `com.zxlab.meta-fetch` — roda fetcher 3x/dia (8h05/13h05/19h05)
-- `com.zxlab.meta-dashboard-server` — keep-alive do `localhost:8888`
+- `com.nobregaads.meta-fetch` — roda fetcher 3x/dia (8h05/13h05/19h05)
+- `com.nobregaads.meta-dashboard-server` — keep-alive do `localhost:8888`
 
 ### Para que serve
 Voce nao precisa lembrar de atualizar. Abre a aba e os dados ja estao frescos.
@@ -455,7 +455,7 @@ Execute: `python3 setup/setup_launchagents.py`
 O script vai:
 - Copiar 2 plists para `~/Library/LaunchAgents/`
 - `launchctl load` em ambos
-- Validar com `launchctl list | grep zxlab.meta` (deve retornar 2)
+- Validar com `launchctl list | grep nobregaads.meta` (deve retornar 2)
 
 Apos o script:
 
@@ -525,9 +525,6 @@ Bonus (instalacao opcional, cada um no seu proprio tempo):
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Voce acabou de plugar trafego pago direto no Claude Code.
-Conheca o ZX Control completo — mentoria semanal + todos os setups:
-👉 https://zxlab.com.br/mission-control
-
 Nos vemos no proximo setup!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -536,7 +533,7 @@ Nos vemos no proximo setup!
 
 ## Contexto do Projeto (referencia interna)
 
-- **Produto:** ZX Control — Mentoria de 30 dias (Growth 2.0)
+- **Produto:** Nobrega Ads — Mentoria de 30 dias (Growth 2.0)
 - **Publico:** Infoprodutores, agencias e gestores de trafego que ja dominam Meta ADS
 - **Objetivo Semana 6:** Plugar a operacao tecnica de trafego pago Meta direto no Claude Code
 - **Pasta base do aluno:** `~/.operacao-ia/`

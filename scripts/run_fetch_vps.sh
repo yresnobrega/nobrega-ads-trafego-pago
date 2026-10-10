@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # run_fetch_vps.sh — coleta + dashboard rodando direto na VPS (sem precisar do Mac).
-# Usado pelo cron da VPS (com.zxlab.meta-fetch equivalente).
+# Usado pelo cron da VPS (com.nobregaads.meta-fetch equivalente).
 
 META_DIR="$HOME/.operacao-ia/scripts/meta"
 PYTHON_BIN="${PYTHON_BIN:-/usr/bin/python3}"

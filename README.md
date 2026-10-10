@@ -12,7 +12,7 @@ Conecte seu gerenciador de anúncios do Meta ao Claude Code e automatize a opera
 ## Instalação
 
 ```bash
-git clone https://github.com/zxmarketingdigital/trafego-pago-automatizado
+git clone https://github.com/yresnobrega/nobrega-ads-trafego-pago
 cd trafego-pago-automatizado
 claude
 ```
@@ -67,13 +67,13 @@ zx-control-trafego-pago/
   @reboot /bin/bash $HOME/.operacao-ia/scripts/meta/start_dashboard.sh
   ```
   O `@reboot` só dispara quando o WSL2 é iniciado (não junto com o Windows) — se preferir o dashboard sempre no ar, rode `bash ~/.operacao-ia/scripts/meta/start_dashboard.sh &` manualmente após abrir o WSL2, ou crie uma Tarefa Básica no Windows Task Scheduler que execute `wsl bash ~/.operacao-ia/scripts/meta/start_dashboard.sh` no logon.
-- **Pixel ZX LAB hardcoded em demo**: aluno deve substituir pelo pixel próprio em E1 — setup pergunta.
+- **Pixel Nobrega Ads hardcoded em demo**: aluno deve substituir pelo pixel próprio em E1 — setup pergunta.
 - **Conflito com creative-roas-dashboard**: se aluno tem outro fetcher Meta rodando, E9 detecta e oferece pular meta-fetch.plist (evita duplicar chamadas API).
 - **Decide() exige amostra ≥1.2× da meta**: ads com gasto baixo aparecem como "amostra insuficiente". Espere 24-72h pra acumular dados antes de decidir.
 - **Token Meta persiste em `~/.operacao-ia/config/meta.env` (chmod 600)**: System User Tokens não expiram automaticamente. Se token for invalidado (troca de senha, desautorização), rode `python3 setup/setup_meta_oauth.py --renew`.
 - **Uninstall disponível**: `python3 setup/setup_uninstall.py` reverte o setup. Opção [A] preserva skills, [B] remove tudo.
-- **1 conta de anúncio por instalação**: `META_AD_ACCOUNT_ID`, o perfil (`~/.operacao-ia/config/meta_perfil.json`) e os dados do dashboard (`~/.operacao-ia/dashboards/paid-traffic-*.json`) são **globais na sua máquina**, não isolados por conta — trocar de conta com `setup_meta_oauth.py --set-account` faz o dashboard passar a mostrar a conta nova, e os arquivos da conta anterior são sobrescritos no próximo fetch. Se você gerencia **mais de uma conta de anúncios** (comum pra quem tem agência ou mais de um negócio), fale com o suporte (https://suporte.zxlab.com.br/hub) antes de rodar o setup numa segunda conta — hoje não existe isolamento nativo entre contas na mesma máquina.
+- **1 conta de anúncio por instalação**: `META_AD_ACCOUNT_ID`, o perfil (`~/.operacao-ia/config/meta_perfil.json`) e os dados do dashboard (`~/.operacao-ia/dashboards/paid-traffic-*.json`) são **globais na sua máquina**, não isolados por conta — trocar de conta com `setup_meta_oauth.py --set-account` faz o dashboard passar a mostrar a conta nova, e os arquivos da conta anterior são sobrescritos no próximo fetch. Se você gerencia **mais de uma conta de anúncios** (comum pra quem tem agência ou mais de um negócio), fale com o suporte (contato@nobregaads.com) antes de rodar o setup numa segunda conta — hoje não existe isolamento nativo entre contas na mesma máquina.
 
 ## Suporte
 
-Suporte: https://suporte.zxlab.com.br/hub
+Suporte: contato@nobregaads.com

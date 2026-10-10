@@ -7,7 +7,7 @@ não lista campanha por campanha. Só responde 3 perguntas por conta:
 2. Já começou a gastar hoje?
 3. Tem sinal de que vai parar por pagamento?
 
-Lê o dashboard já gerado pelo com.zxlab.meta-fetch (paid-traffic-1d.json) —
+Lê o dashboard já gerado pelo com.nobregaads.meta-fetch (paid-traffic-1d.json) —
 não chama a Graph API, só formata o que já foi coletado.
 """
 
@@ -148,7 +148,7 @@ def main() -> int:
 
     if not DASHBOARD_1D.exists():
         print(
-            f"❌ {DASHBOARD_1D} não existe. Rode o coletor (com.zxlab.meta-fetch) antes.",
+            f"❌ {DASHBOARD_1D} não existe. Rode o coletor (com.nobregaads.meta-fetch) antes.",
             file=sys.stderr,
         )
         return 3

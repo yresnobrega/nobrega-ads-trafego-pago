@@ -118,7 +118,7 @@ Executar o instalador novamente atualiza e recarrega o mesmo job, sem duplicar.
 Verificar o job:
 
 ```bash
-launchctl list | grep com.zxlab.meta-checkin
+launchctl list | grep com.nobregaads.meta-checkin
 ```
 
 Enviar imediatamente:
@@ -148,8 +148,8 @@ Nunca mostrar token, API key nem o número completo durante o diagnóstico.
 ## 7. Desinstalar
 
 ```bash
-launchctl unload ~/Library/LaunchAgents/com.zxlab.meta-checkin.plist
-rm ~/Library/LaunchAgents/com.zxlab.meta-checkin.plist
+launchctl unload ~/Library/LaunchAgents/com.nobregaads.meta-checkin.plist
+rm ~/Library/LaunchAgents/com.nobregaads.meta-checkin.plist
 ```
 
 Isso remove apenas o agendamento. Para remover também os scripts, apagar `send_whatsapp_report.py` somente se não for mais usado; manter `report_formatter.py` se o e-mail ainda estiver ativo.

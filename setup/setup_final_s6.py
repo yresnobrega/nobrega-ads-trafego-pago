@@ -75,9 +75,6 @@ Comandos do dia a dia:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Voce acabou de plugar trafego pago direto no Claude Code.
-Conheca o ZX Control completo — mentoria semanal + todos os setups:
-👉 https://zxlab.com.br/mission-control
-
 Nos vemos no proximo setup!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """)

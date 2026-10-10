@@ -104,9 +104,9 @@ def c_launchagents_files():
     if platform.system() != "Darwin":
         return True, "macOS-only — pulado"
     skip = _fetch_skipped()
-    expected = ["com.zxlab.meta-dashboard-server.plist"]
+    expected = ["com.nobregaads.meta-dashboard-server.plist"]
     if not skip:
-        expected.insert(0, "com.zxlab.meta-fetch.plist")
+        expected.insert(0, "com.nobregaads.meta-fetch.plist")
     missing = [n for n in expected if not (LAUNCH / n).exists()]
     if missing:
         return False, f"Faltando: {missing}"
@@ -120,7 +120,7 @@ def c_launchagents_loaded():
     skip = _fetch_skipped()
     expected_count = 1 if skip else 2
     result = subprocess.run(["launchctl", "list"], capture_output=True, text=True)
-    count = sum(1 for l in result.stdout.splitlines() if "zxlab.meta" in l)
+    count = sum(1 for l in result.stdout.splitlines() if "nobregaads.meta" in l)
     if count < expected_count:
         return False, f"Esperava {expected_count} job(s) ativo(s), encontrou {count}"
     suffix = f" (fetch pulado: {skip})" if skip else ""

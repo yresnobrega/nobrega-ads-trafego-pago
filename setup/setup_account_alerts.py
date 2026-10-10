@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Instalador opt-in — alerta imediato no WhatsApp quando uma conta Meta para
 (pagamento recusado, restrição, revisão, fechamento etc). Roda a cada 15min,
-separado do relatório periódico (com.zxlab.meta-report-whatsapp)."""
+separado do relatório periódico (com.nobregaads.meta-report-whatsapp)."""
 
 import filecmp
 import os
@@ -18,7 +18,7 @@ OPERACAO = Path.home() / ".operacao-ia"
 SCRIPT_DST_DIR = OPERACAO / "scripts" / "meta"
 META_ENV = OPERACAO / "config" / "meta.env"
 LOG_DIR = OPERACAO / "logs"
-PLIST_NAME = "com.zxlab.meta-account-alert.plist"
+PLIST_NAME = "com.nobregaads.meta-account-alert.plist"
 PLIST_SRC = REPO_ROOT / "launchagents" / PLIST_NAME
 PLIST_DST = Path.home() / "Library" / "LaunchAgents" / PLIST_NAME
 SCRIPT_NAMES = ("check_account_alerts.py", "fetch_metrics.py", "send_whatsapp_report.py", "report_formatter.py")
